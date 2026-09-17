@@ -1,6 +1,4 @@
 import { Platform, Share, Alert } from 'react-native';
-import { File, Paths } from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
 
 export interface DownloadResult {
   success: boolean;
@@ -16,7 +14,7 @@ export const downloadImageToDevice = async (
   fileName = `fotoowl_${Date.now()}.jpg`
 ): Promise<DownloadResult> => {
   try {
-    // 1. Web Platform Implementation
+    // 1. Web Platform Implementation (Browser-safe, zero native module dependencies)
     if (Platform.OS === 'web') {
       try {
         const response = await fetch(imageUrl);
@@ -38,6 +36,10 @@ export const downloadImageToDevice = async (
     }
 
     // 2. Mobile (Android / iOS) Implementation
+    // Dynamically loaded on native devices to prevent web bundling native module errors
+    const MediaLibrary = require('expo-media-library');
+    const { File, Paths } = require('expo-file-system');
+
     const { status } = await MediaLibrary.requestPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert(
