@@ -132,15 +132,23 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     setErrors({});
   };
 
+  // On web, KeyboardAvoidingView prevents ScrollView from scrolling
+  const Wrapper = Platform.OS === 'web' ? View : KeyboardAvoidingView;
+  const wrapperProps =
+    Platform.OS === 'web'
+      ? {}
+      : { behavior: Platform.OS === 'ios' ? ('padding' as const) : undefined };
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <Wrapper
+      {...wrapperProps}
       style={[styles.screenContainer, { backgroundColor: theme.background }]}
     >
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
+        style={styles.scrollView}
       >
         {/* Header Branding */}
         <View style={styles.header}>
@@ -342,17 +350,23 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </Wrapper>
   );
 };
 
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
+    overflow: Platform.OS === 'web' ? 'auto' : 'hidden',
+  },
+  scrollView: {
+    flex: 1,
   },
   scrollContent: {
+    flexGrow: 1,
     padding: 20,
     paddingTop: Platform.OS === 'web' ? 40 : 20,
+    paddingBottom: 60,
     maxWidth: 520,
     width: '100%',
     alignSelf: 'center',
