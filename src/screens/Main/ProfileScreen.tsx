@@ -46,6 +46,7 @@ export const ProfileScreen: React.FC = () => {
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
 
   // Edit Form Fields
   const [fullName, setFullName] = useState(user?.fullName || '');
@@ -115,21 +116,17 @@ export const ProfileScreen: React.FC = () => {
   };
 
   const handleLogout = () => {
+    // Use custom modal on web (window.confirm blocked in some browsers),
+    // fallback to native Alert on iOS/Android
     if (Platform.OS === 'web') {
-      if (window.confirm('Are you sure you want to sign out of FotoOwl?')) {
-        logout();
-      }
+      setIsSignOutModalOpen(true);
     } else {
       Alert.alert(
         'Sign Out',
         'Are you sure you want to sign out of FotoOwl?',
         [
           { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Sign Out',
-            style: 'destructive',
-            onPress: () => logout(),
-          },
+          { text: 'Sign Out', style: 'destructive', onPress: () => logout() },
         ]
       );
     }
@@ -474,6 +471,48 @@ export const ProfileScreen: React.FC = () => {
         </View>
       </Modal>
 
+      {/* ── Sign Out Confirmation Modal (web-safe) ── */}
+      <Modal
+        visible={isSignOutModalOpen}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setIsSignOutModalOpen(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View
+            style={[
+              styles.signOutSheet,
+              { backgroundColor: theme.surface, borderColor: theme.border },
+            ]}
+          >
+            <View style={styles.signOutIconWrap}>
+              <Ionicons name="log-out-outline" size={36} color={theme.danger} />
+            </View>
+            <Text style={[styles.signOutTitle, { color: theme.text }]}>
+              Sign Out
+            </Text>
+            <Text style={[styles.signOutMsg, { color: theme.textSecondary }]}>
+              Are you sure you want to sign out of FotoOwl?
+            </Text>
+            <View style={styles.signOutActions}>
+              <Button
+                title="Cancel"
+                variant="ghost"
+                onPress={() => setIsSignOutModalOpen(false)}
+                style={{ flex: 1 }}
+              />
+              <Button
+                title="Sign Out"
+                variant="danger"
+                onPress={() => { setIsSignOutModalOpen(false); logout(); }}
+                style={{ flex: 1 }}
+                icon={<Ionicons name="log-out-outline" size={18} color="#FFFFFF" />}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       {/* Choose Avatar Modal */}
       <Modal
         visible={isAvatarModalOpen}
@@ -748,5 +787,38 @@ const styles = StyleSheet.create({
   },
   avatarChoiceName: {
     fontSize: 12,
+  },
+  signOutSheet: {
+    width: '100%',
+    maxWidth: 360,
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 24,
+    alignItems: 'center',
+  },
+  signOutIconWrap: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: 'rgba(239,68,68,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  signOutTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    marginBottom: 8,
+  },
+  signOutMsg: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  signOutActions: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
   },
 });

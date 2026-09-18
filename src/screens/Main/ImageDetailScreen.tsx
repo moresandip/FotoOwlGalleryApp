@@ -41,6 +41,11 @@ export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadSuccessMsg, setDownloadSuccessMsg] = useState<string | null>(null);
 
+  // Accordion section open/close states
+  const [openPhoto, setOpenPhoto] = useState(true);
+  const [openTechnical, setOpenTechnical] = useState(true);
+  const [openAbout, setOpenAbout] = useState(false);
+
   // High quality display URL
   const fullSizeUrl = `https://picsum.photos/id/${image.id}/1200/900`;
 
@@ -167,7 +172,7 @@ export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
           </View>
         )}
 
-        {/* Metadata Card */}
+        {/* Metadata Card with Accordion Sections */}
         <View
           style={[
             styles.metaCard,
@@ -177,6 +182,7 @@ export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
             },
           ]}
         >
+          {/* Author Row */}
           <View style={styles.authorSection}>
             <View
               style={[
@@ -198,44 +204,109 @@ export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
 
           <View style={[styles.divider, { backgroundColor: theme.borderSubtle }]} />
 
-          {/* Details Grid */}
-          <View style={styles.infoGrid}>
-            <View style={styles.infoItem}>
-              <Text style={[styles.infoLabel, { color: theme.textMuted }]}>
-                Photo ID
-              </Text>
-              <Text style={[styles.infoValue, { color: theme.text }]}>
-                #{image.id}
-              </Text>
+          {/* ── ACCORDION: Photo Info ── */}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setOpenPhoto(!openPhoto)}
+            style={styles.accordionHeader}
+          >
+            <View style={styles.accordionHeaderLeft}>
+              <Ionicons name="image-outline" size={18} color={theme.primary} />
+              <Text style={[styles.accordionTitle, { color: theme.text }]}>Photo Info</Text>
             </View>
+            <Ionicons
+              name={openPhoto ? 'chevron-up' : 'chevron-down'}
+              size={18}
+              color={theme.textMuted}
+            />
+          </TouchableOpacity>
+          {openPhoto && (
+            <View style={styles.accordionBody}>
+              <View style={styles.infoGrid}>
+                <View style={styles.infoItem}>
+                  <Text style={[styles.infoLabel, { color: theme.textMuted }]}>Photo ID</Text>
+                  <Text style={[styles.infoValue, { color: theme.text }]}>#{image.id}</Text>
+                </View>
+                <View style={styles.infoItem}>
+                  <Text style={[styles.infoLabel, { color: theme.textMuted }]}>Provider</Text>
+                  <Text style={[styles.infoValue, { color: theme.text }]}>Lorem Picsum</Text>
+                </View>
+              </View>
+            </View>
+          )}
 
-            <View style={styles.infoItem}>
-              <Text style={[styles.infoLabel, { color: theme.textMuted }]}>
-                Native Resolution
-              </Text>
-              <Text style={[styles.infoValue, { color: theme.text }]}>
-                {image.width} × {image.height} px
-              </Text>
-            </View>
+          <View style={[styles.accordionDivider, { backgroundColor: theme.borderSubtle }]} />
 
-            <View style={styles.infoItem}>
-              <Text style={[styles.infoLabel, { color: theme.textMuted }]}>
-                Aspect Ratio
-              </Text>
-              <Text style={[styles.infoValue, { color: theme.text }]}>
-                {(image.width / image.height).toFixed(2)} : 1
-              </Text>
+          {/* ── ACCORDION: Technical Details ── */}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setOpenTechnical(!openTechnical)}
+            style={styles.accordionHeader}
+          >
+            <View style={styles.accordionHeaderLeft}>
+              <Ionicons name="settings-outline" size={18} color={theme.primary} />
+              <Text style={[styles.accordionTitle, { color: theme.text }]}>Technical Details</Text>
             </View>
+            <Ionicons
+              name={openTechnical ? 'chevron-up' : 'chevron-down'}
+              size={18}
+              color={theme.textMuted}
+            />
+          </TouchableOpacity>
+          {openTechnical && (
+            <View style={styles.accordionBody}>
+              <View style={styles.infoGrid}>
+                <View style={styles.infoItem}>
+                  <Text style={[styles.infoLabel, { color: theme.textMuted }]}>Native Resolution</Text>
+                  <Text style={[styles.infoValue, { color: theme.text }]}>{image.width} × {image.height} px</Text>
+                </View>
+                <View style={styles.infoItem}>
+                  <Text style={[styles.infoLabel, { color: theme.textMuted }]}>Aspect Ratio</Text>
+                  <Text style={[styles.infoValue, { color: theme.text }]}>{(image.width / image.height).toFixed(2)} : 1</Text>
+                </View>
+                <View style={styles.infoItem}>
+                  <Text style={[styles.infoLabel, { color: theme.textMuted }]}>Width</Text>
+                  <Text style={[styles.infoValue, { color: theme.text }]}>{image.width} px</Text>
+                </View>
+                <View style={styles.infoItem}>
+                  <Text style={[styles.infoLabel, { color: theme.textMuted }]}>Height</Text>
+                  <Text style={[styles.infoValue, { color: theme.text }]}>{image.height} px</Text>
+                </View>
+              </View>
+            </View>
+          )}
 
-            <View style={styles.infoItem}>
-              <Text style={[styles.infoLabel, { color: theme.textMuted }]}>
-                Provider
+          <View style={[styles.accordionDivider, { backgroundColor: theme.borderSubtle }]} />
+
+          {/* ── ACCORDION: About ── */}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setOpenAbout(!openAbout)}
+            style={styles.accordionHeader}
+          >
+            <View style={styles.accordionHeaderLeft}>
+              <Ionicons name="information-circle-outline" size={18} color={theme.primary} />
+              <Text style={[styles.accordionTitle, { color: theme.text }]}>About this Photo</Text>
+            </View>
+            <Ionicons
+              name={openAbout ? 'chevron-up' : 'chevron-down'}
+              size={18}
+              color={theme.textMuted}
+            />
+          </TouchableOpacity>
+          {openAbout && (
+            <View style={styles.accordionBody}>
+              <Text style={[styles.aboutText, { color: theme.textSecondary }]}>
+                This image is provided by Lorem Picsum, a free service for beautiful placeholder photos.
+                The photo was contributed by {image.author} and is available for use under the Picsum Photos license.
               </Text>
-              <Text style={[styles.infoValue, { color: theme.text }]}>
-                Lorem Picsum
+              <Text style={[styles.aboutText, { color: theme.textSecondary, marginTop: 8 }]}>
+                Download URL: picsum.photos/id/{image.id}/{image.width}/{image.height}
               </Text>
             </View>
-          </View>
+          )}
+
+          <View style={[styles.divider, { backgroundColor: theme.borderSubtle }]} />
 
           {/* Primary Action Buttons */}
           <View style={styles.actionsContainer}>
@@ -245,14 +316,9 @@ export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
               loading={isDownloading}
               size="lg"
               icon={
-                <Ionicons
-                  name="cloud-download-outline"
-                  size={20}
-                  color="#FFFFFF"
-                />
+                <Ionicons name="cloud-download-outline" size={20} color="#FFFFFF" />
               }
             />
-
             <View style={styles.secondaryActionsRow}>
               <Button
                 title={isFavorited ? 'Remove Favorite' : 'Add to Favorites'}
@@ -267,18 +333,13 @@ export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
                   />
                 }
               />
-
               <Button
                 title="Share"
                 variant="secondary"
                 onPress={handleShare}
                 style={{ flex: 1 }}
                 icon={
-                  <Ionicons
-                    name="share-outline"
-                    size={18}
-                    color={theme.text}
-                  />
+                  <Ionicons name="share-outline" size={18} color={theme.text} />
                 }
               />
             </View>
@@ -533,5 +594,31 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontSize: 12,
     marginTop: 4,
+  },
+  // ── Accordion styles ──
+  accordionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+  },
+  accordionHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  accordionTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  accordionBody: {
+    paddingBottom: 8,
+  },
+  accordionDivider: {
+    height: 1,
+  },
+  aboutText: {
+    fontSize: 13,
+    lineHeight: 20,
   },
 });
