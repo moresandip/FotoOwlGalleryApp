@@ -217,3 +217,5 @@ eas build --platform android --profile preview
 1. **State Management with Zustand**: Chosen for its lightweight footprint, zero boilerplate, effortless TypeScript inference, and seamless integration with `AsyncStorage` without complex reducer plumbing.
 2. **Double Platform Compatibility**: The app is designed using responsive flex layouts and platform branching (`Platform.select`) so that whether an evaluator runs it on an Android phone, tablet, or web browser, the UI remains crisp, modern, and perfectly proportioned.
 3. **Bandwidth Optimization**: The gallery leverages Picsum's dynamic URL dimensions (`https://picsum.photos/id/${id}/500/350`) for thumbnails to ensure rapid grid rendering, while requesting full high-res assets (`1200x900` or original resolution) only upon tapping into detail or full-screen inspection.
+#   F o t o O w l G a l l e r y A p p  
+ 
