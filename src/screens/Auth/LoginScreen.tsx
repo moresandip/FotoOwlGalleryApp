@@ -112,7 +112,13 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={true}
-        style={styles.scrollView}
+        style={[
+          styles.scrollView,
+          Platform.OS === 'web' && {
+            overflowY: 'scroll' as any,
+            WebkitOverflowScrolling: 'touch' as any,
+          },
+        ]}
       >
         {/* Header Branding */}
         <View style={styles.header}>

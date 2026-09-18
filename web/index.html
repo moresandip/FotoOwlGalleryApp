@@ -6,22 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>FotoOwl Gallery</title>
     <style id="expo-reset">
-      /* Make body full-height but allow scrolling */
-      html {
+      html, body {
         height: 100%;
-      }
-      body {
-        height: 100%;
-        /* Override Expo default: allow scroll instead of hidden */
-        overflow: auto;
         margin: 0;
         padding: 0;
       }
-      /* Root element fills full height */
+      body {
+        /* Allow the react-native-web ScrollView to scroll */
+        overflow: hidden;
+      }
       #root {
         display: flex;
-        min-height: 100%;
+        height: 100%;
         flex: 1;
+        overflow: hidden;
       }
     </style>
   </head>

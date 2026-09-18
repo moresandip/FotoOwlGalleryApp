@@ -148,7 +148,14 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={true}
-        style={styles.scrollView}
+        style={[
+          styles.scrollView,
+          // On web, explicitly enable scroll
+          Platform.OS === 'web' && {
+            overflowY: 'scroll' as any,
+            WebkitOverflowScrolling: 'touch' as any,
+          },
+        ]}
       >
         {/* Header Branding */}
         <View style={styles.header}>
@@ -357,7 +364,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    overflow: Platform.OS === 'web' ? 'auto' : 'hidden',
+    overflow: 'hidden' as any,
   },
   scrollView: {
     flex: 1,
