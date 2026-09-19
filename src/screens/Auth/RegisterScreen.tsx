@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -132,6 +132,39 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     setErrors({});
   };
 
+  // Inject CSS on web to show right-side scrollbar
+  useEffect(() => {
+    if (Platform.OS === 'web') {
+      const styleId = 'register-scroll-style';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.innerHTML = `
+          /* Register screen scrollbar */
+          .register-scroll::-webkit-scrollbar {
+            width: 6px;
+          }
+          .register-scroll::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 3px;
+          }
+          .register-scroll::-webkit-scrollbar-thumb {
+            background: rgba(99,102,241,0.6);
+            border-radius: 3px;
+          }
+          .register-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(99,102,241,0.9);
+          }
+          .register-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(99,102,241,0.6) rgba(255,255,255,0.05);
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
+
   // On web, KeyboardAvoidingView prevents ScrollView from scrolling
   const Wrapper = Platform.OS === 'web' ? View : KeyboardAvoidingView;
   const wrapperProps =
@@ -150,12 +183,13 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         showsVerticalScrollIndicator={true}
         style={[
           styles.scrollView,
-          // On web, explicitly enable scroll
           Platform.OS === 'web' && {
             overflowY: 'scroll' as any,
             WebkitOverflowScrolling: 'touch' as any,
           },
         ]}
+        // Apply CSS class on web for styled scrollbar
+        {...(Platform.OS === 'web' ? { className: 'register-scroll' } as any : {})}
       >
         {/* Header Branding */}
         <View style={styles.header}>
