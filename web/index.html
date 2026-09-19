@@ -21,7 +21,37 @@
         flex: 1;
         overflow: hidden;
       }
+      /* Force react-native-web ScrollView containers to scroll */
+      [data-focusable="true"],
+      div[style*="overflow"] {
+        -webkit-overflow-scrolling: touch;
+      }
     </style>
+    <!-- Scroll enabler: fixes react-native-web ScrollView on web -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // After app mounts, find all ScrollView containers and ensure they scroll
+        setTimeout(function() {
+          var scrollables = document.querySelectorAll('[style*="overflow"]');
+          scrollables.forEach(function(el) {
+            if (el.scrollHeight > el.clientHeight) {
+              el.style.overflowY = 'scroll';
+              el.style.webkitOverflowScrolling = 'touch';
+            }
+          });
+          // Keep checking as navigation changes
+          setInterval(function() {
+            var scrollables = document.querySelectorAll('[style*="overflow"]');
+            scrollables.forEach(function(el) {
+              if (el.scrollHeight > el.clientHeight) {
+                el.style.overflowY = 'scroll';
+                el.style.webkitOverflowScrolling = 'touch';
+              }
+            });
+          }, 1000);
+        }, 500);
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
