@@ -115,10 +115,11 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
         style={[
           styles.scrollView,
           Platform.OS === 'web' && {
-            overflowY: 'scroll' as any,
+            overflowY: 'auto' as any,
             WebkitOverflowScrolling: 'touch' as any,
           },
         ]}
+        {...(Platform.OS === 'web' ? { className: 'register-scroll' } as any : {})}
       >
         {/* Header Branding */}
         <View style={styles.header}>
@@ -246,17 +247,19 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    height: Platform.OS === 'web' ? '100vh' : undefined,
-    overflow: 'visible',
+    width: '100%',
+    height: Platform.OS === 'web' ? ('100%' as any) : undefined,
+    maxHeight: Platform.OS === 'web' ? ('100vh' as any) : undefined,
   },
   scrollView: {
     flex: 1,
+    width: '100%',
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 20,
-    paddingTop: Platform.OS === 'web' ? 50 : 30,
-    paddingBottom: 60,
+    paddingHorizontal: 16,
+    paddingTop: Platform.OS === 'web' ? 40 : 24,
+    paddingBottom: 80,
     maxWidth: 480,
     width: '100%',
     alignSelf: 'center',

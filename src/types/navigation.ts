@@ -15,5 +15,5 @@ export type MainTabParamList = {
 export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;
-  ImageDetail: { image: PicsumImage };
+  ImageDetail: { image?: PicsumImage; id?: string };
 };

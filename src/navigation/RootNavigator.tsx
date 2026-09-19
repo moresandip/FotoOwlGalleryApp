@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
+import { linking } from './linking';
 import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';
 import { ImageDetailScreen } from '../screens/Main/ImageDetailScreen';
@@ -46,7 +47,14 @@ export const RootNavigator: React.FC = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={linking}
+      fallback={
+        <View style={[styles.loadingScreen, { backgroundColor: theme.background }]}>
+          <LoadingSpinner message="Loading FotoOwl..." />
+        </View>
+      }
+    >
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

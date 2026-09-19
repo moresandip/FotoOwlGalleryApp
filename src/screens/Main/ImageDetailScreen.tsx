@@ -15,6 +15,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList } from '../../types/navigation';
+import { PicsumImage } from '../../types/gallery';
 import { useTheme } from '../../hooks/useTheme';
 import { useGalleryStore } from '../../store/useGalleryStore';
 import { downloadImageToDevice, shareImage } from '../../utils/fileDownloader';
@@ -29,7 +30,20 @@ interface Props {
 }
 
 export const ImageDetailScreen: React.FC<Props> = ({ route, navigation }) => {
-  const { image } = route.params;
+  const favorites = useGalleryStore((state) => state.favorites);
+
+  const fallbackId = route.params?.id || '0';
+  const image: PicsumImage =
+    route.params?.image ||
+    favorites.find((img) => img.id === route.params?.id) || {
+      id: fallbackId,
+      author: 'Photographer',
+      width: 1200,
+      height: 900,
+      url: `https://picsum.photos/id/${fallbackId}/1200/900`,
+      download_url: `https://picsum.photos/id/${fallbackId}/1200/900`,
+    };
+
   const { theme } = useTheme();
 
   const toggleFavorite = useGalleryStore((state) => state.toggleFavorite);

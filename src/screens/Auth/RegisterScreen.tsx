@@ -132,36 +132,40 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     setErrors({});
   };
 
-  // Inject CSS on web to show right-side scrollbar
+  // Inject CSS on web to show right-side scrollbar and ensure smooth scrolling
   useEffect(() => {
     if (Platform.OS === 'web') {
       const styleId = 'register-scroll-style';
-      if (!document.getElementById(styleId)) {
-        const style = document.createElement('style');
+      let style = document.getElementById(styleId) as HTMLStyleElement | null;
+      if (!style) {
+        style = document.createElement('style');
         style.id = styleId;
-        style.innerHTML = `
-          /* Register screen scrollbar */
-          .register-scroll::-webkit-scrollbar {
-            width: 6px;
-          }
-          .register-scroll::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 3px;
-          }
-          .register-scroll::-webkit-scrollbar-thumb {
-            background: rgba(99,102,241,0.6);
-            border-radius: 3px;
-          }
-          .register-scroll::-webkit-scrollbar-thumb:hover {
-            background: rgba(99,102,241,0.9);
-          }
-          .register-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(99,102,241,0.6) rgba(255,255,255,0.05);
-          }
-        `;
         document.head.appendChild(style);
       }
+      style.innerHTML = `
+        /* Register screen scrollbar & smooth scrolling */
+        .register-scroll {
+          overflow-y: auto !important;
+          -webkit-overflow-scrolling: touch !important;
+          scroll-behavior: smooth !important;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(99,102,241,0.6) rgba(255,255,255,0.05);
+        }
+        .register-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .register-scroll::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.05);
+          border-radius: 3px;
+        }
+        .register-scroll::-webkit-scrollbar-thumb {
+          background: rgba(99,102,241,0.6);
+          border-radius: 3px;
+        }
+        .register-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(99,102,241,0.9);
+        }
+      `;
     }
   }, []);
 
@@ -184,7 +188,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         style={[
           styles.scrollView,
           Platform.OS === 'web' && {
-            overflowY: 'scroll' as any,
+            overflowY: 'auto' as any,
             WebkitOverflowScrolling: 'touch' as any,
           },
         ]}
@@ -398,17 +402,19 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    height: Platform.OS === 'web' ? '100vh' : undefined,
-    overflow: 'visible',
+    width: '100%',
+    height: Platform.OS === 'web' ? ('100%' as any) : undefined,
+    maxHeight: Platform.OS === 'web' ? ('100vh' as any) : undefined,
   },
   scrollView: {
     flex: 1,
+    width: '100%',
   },
   scrollContent: {
     flexGrow: 1,
-    padding: 20,
-    paddingTop: Platform.OS === 'web' ? 40 : 20,
-    paddingBottom: 60,
+    paddingHorizontal: 16,
+    paddingTop: Platform.OS === 'web' ? 24 : 16,
+    paddingBottom: 80,
     maxWidth: 520,
     width: '100%',
     alignSelf: 'center',
