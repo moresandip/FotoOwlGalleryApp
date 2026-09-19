@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     height: Platform.OS === 'web' ? '100vh' : undefined,
-    overflow: 'hidden' as any,
+    overflow: 'visible',
   },
   scrollView: {
     flex: 1,
